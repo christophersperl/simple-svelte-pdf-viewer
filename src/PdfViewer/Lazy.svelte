@@ -1,25 +1,10 @@
-<div use:load>
-  {#if loaded}
-    {#if fadeOption}
-      <div transition:fade={fadeOption}>
-        <slot>Lazy load content</slot>
-      </div>
-    {:else}
-      <slot>Lazy load content</slot>
-    {/if}
-  {:else if typeof placeholder === 'string'}
-    <div>{placeholder}</div>
-  {:else if typeof placeholder === 'function'}
-    <svelte:component this={placeholder} />
-  {/if}
-</div>
 <script>
-  import { fade } from 'svelte/transition';
+  import { fade } from "svelte/transition";
   export let height = 0;
   export let offset = 150;
   export let fadeOption = {
     delay: 0,
-    duration: 400, 
+    duration: 400
   };
   export let resetHeightDelay = 0;
   export let onload = null;
@@ -46,31 +31,31 @@
     addListeners();
 
     function addListeners() {
-      document.addEventListener('scroll', loadHandler, true);
-      window.addEventListener('resize', loadHandler);
+      document.addEventListener("scroll", loadHandler, true);
+      window.addEventListener("resize", loadHandler);
     }
 
     function removeListeners() {
-      document.removeEventListener('scroll', loadHandler, true);
-      window.removeEventListener('resize', loadHandler);
+      document.removeEventListener("scroll", loadHandler, true);
+      window.removeEventListener("resize", loadHandler);
     }
 
     return {
       destroy: () => {
         removeListeners();
-      },
+      }
     };
   }
 
   function setHeight(node) {
     if (height) {
-      node.style.height = (typeof height === 'number') ? height + 'px' : height;
+      node.style.height = typeof height === "number" ? height + "px" : height;
     }
   }
 
   function resetHeight(node) {
     // Add delay for remote resources like images to load
-    setTimeout(() => node.style.height = 'auto', resetHeightDelay);
+    setTimeout(() => (node.style.height = "auto"), resetHeightDelay);
   }
 
   function getExpectedTop(e, offset) {
@@ -120,3 +105,19 @@
     };
   }
 </script>
+
+<div use:load>
+  {#if loaded}
+    {#if fadeOption}
+      <div transition:fade={fadeOption}>
+        <slot>Lazy load content</slot>
+      </div>
+    {:else}
+      <slot>Lazy load content</slot>
+    {/if}
+  {:else if typeof placeholder === 'string'}
+    <div>{placeholder}</div>
+  {:else if typeof placeholder === 'function'}
+    <svelte:component this={placeholder} />
+  {/if}
+</div>
